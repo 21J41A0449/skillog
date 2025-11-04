@@ -184,25 +184,35 @@ export default function App() {
   };
 
   const renderDeveloperPages = () => {
+    console.log('App: rendering route:', route, 'params:', params);
     switch (route) {
       case 'feed':
+        console.log('App: rendering FeedPage');
         return <FeedPage logs={publicLogs} upvotedItems={upvotedItems} onUpvote={handleUpvote} />;
       case 'log':
+        console.log('App: rendering LogDetailPage');
         return <LogDetailPage logId={params.id} currentUser={user!} upvotedItems={upvotedItems} onUpvote={handleUpvote} />;
       case 'circles':
+        console.log('App: rendering CirclesDirectoryPage');
         return <CirclesDirectoryPage />;
       case 'circle':
+        console.log('App: rendering CirclePage with circleId:', params.id);
         return <CirclePage circleId={params.id} currentUser={user!} publicLogs={publicLogs} />;
       case 'recruiters':
+        console.log('App: rendering RecruitersPage');
         return <RecruitersPage />;
       case 'settings':
+        console.log('App: rendering SettingsPage');
         return <SettingsPage user={user!} profile={profile!} onProfileUpdate={handleProfileUpdate} />;
       case 'report':
+        console.log('App: rendering ReportPage');
         return <ReportPage logs={logs} user={user!} />;
       case 'profile':
+        console.log('App: rendering ProfilePage');
         return <ProfilePage profileId={params.id || user!.id} currentUser={user!} />;
       case 'dashboard':
       default:
+        console.log('App: rendering default DashboardPage');
         return <DashboardPage logs={logs} currentUser={user!} onAddLog={handleAddLog} onDeleteLog={handleDeleteLog} />;
     }
   };

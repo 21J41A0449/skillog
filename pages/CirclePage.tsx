@@ -27,6 +27,7 @@ const ChatMessage = ({ msg }: { msg: CircleMessage }) => (
 );
 
 export default function CirclePage({ circleId, currentUser, publicLogs }: CirclePageProps) {
+    console.log('CirclePage: rendered with circleId:', circleId);
     const [circle, setCircle] = useState<Circle | null>(null);
     const [messages, setMessages] = useState<CircleMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');

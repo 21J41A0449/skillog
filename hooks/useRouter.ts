@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react';
 
 const parseHash = (hash: string) => {
+    console.log('useRouter: parsing hash:', hash);
     const [path, param, ...rest] = hash.substring(1).split('/');
+    console.log('useRouter: path:', path, 'param:', param);
     let route = path || 'feed'; // Default to feed for logged-in developers
-    
+
     // Handle auth routes specifically
     if (path === 'auth' && param === 'recruiter') {
         route = 'auth-recruiter';
@@ -18,7 +20,8 @@ const parseHash = (hash: string) => {
     if ((route === 'log' || route === 'circle' || route === 'profile') && param) {
         params.id = param;
     }
-    
+
+    console.log('useRouter: final route:', route, 'params:', params);
     return { route, params };
 };
 
