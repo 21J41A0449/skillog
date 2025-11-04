@@ -1,0 +1,5 @@
+
+{
+  "name": "Daily Skill Log",
+  "description": "A minimal, no-auth MVP where users can log what they learn each day, with data stored locally in the browser."
+}
