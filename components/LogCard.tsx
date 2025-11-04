@@ -7,7 +7,7 @@ import TagLink from './TagLink';
 
 interface LogCardProps {
   log: LogEntry;
-  currentUser: User;
+  currentUser?: User;
   upvotedItems: Set<string>;
   onUpvote: (id: string, type: 'log' | 'comment', authorId: string) => void;
   onDelete?: (logId: string) => void;
@@ -36,7 +36,7 @@ export default function LogCard({ log, currentUser, upvotedItems, onUpvote, onDe
     }
   };
 
-  const isOwnLog = log.user_id === currentUser.id;
+  const isOwnLog = currentUser && log.user_id === currentUser.id;
 
   return (
     <div className="bg-surface p-5 rounded-xl border border-border hover:border-accent-primary/50 transition-colors duration-300 animate-fade-in">
