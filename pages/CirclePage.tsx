@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Circle, CircleMessage, User, LogEntry } from '../types';
+import { Circle, CircleMessage, LogEntry } from '../types';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 import { UserIcon } from '../components/icons';
 
@@ -58,17 +59,21 @@ export default function CirclePage({ circleId, currentUser, publicLogs }: Circle
         };
 
         fetchCircleData();
+    }, [circleId]);
+
+    // Separate useEffect for real-time subscription - only runs when circle is loaded
+    useEffect(() => {
+        if (!circle?.id) return; // Don't subscribe until circle data is loaded
 
         const channel = supabase.channel(`circle_${circleId}`);
-        channel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'circle_messages', filter: `circle_id=eq.${circle?.id}` }, (payload) => {
+        channel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'circle_messages', filter: `circle_id=eq.${circle.id}` }, (payload) => {
             setMessages(prev => [...prev, payload.new as CircleMessage]);
         }).subscribe();
 
         return () => {
             supabase.removeChannel(channel);
         };
-
-    }, [circleId, circle?.id]);
+    }, [circle?.id, circleId]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -112,10 +117,10 @@ export default function CirclePage({ circleId, currentUser, publicLogs }: Circle
             </div>
             <div className="space-y-6">
                 <div className="bg-surface p-4 rounded-xl border border-border">
-                    <h3 className="font-bold text-text-primary mb-3">Members Online (2)</h3>
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm text-text-primary"><span className="w-2 h-2 rounded-full bg-green-500"></span>You</div>
-                        <div className="flex items-center gap-2 text-sm text-text-secondary"><span className="w-2 h-2 rounded-full bg-green-500"></span>Jane Doe</div>
+                    <h3 className="font-bold text-text-primary mb-3">Study Circle</h3>
+                    <div className="space-y-2 text-sm text-text-secondary">
+                        <p>Join the conversation and connect with fellow learners in real-time.</p>
+                        <p className="text-xs">💡 Ask questions, share resources, and learn together!</p>
                     </div>
                 </div>
                 <div className="bg-surface p-4 rounded-xl border border-border">

@@ -8,8 +8,8 @@ const CircleCard = ({ circle }: { circle: Circle }) => (
     <a href={`#/circle/${circle.name}`} className="block bg-surface p-6 rounded-xl border border-border hover:border-accent-secondary/50 transition-colors">
         <h3 className="font-bold text-text-primary"># {circle.name}</h3>
         <p className="mt-1 text-sm text-text-secondary">{circle.description}</p>
-        <div className="mt-4 text-xs text-text-secondary">
-            <span className="font-semibold text-accent-secondary">15</span> members online
+        <div className="mt-4 text-xs text-accent-secondary">
+            💬 Join the conversation
         </div>
     </a>
 );
