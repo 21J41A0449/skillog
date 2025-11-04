@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Comment, User } from '../types';
+import { Comment } from '../types';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 import { UserIcon, UpvoteIcon, StarIcon } from './icons';
 
@@ -19,7 +20,7 @@ const CommentItem = ({ comment, onUpvote, isUpvoted }: { comment: Comment, onUpv
         e.stopPropagation();
         onUpvote(comment.id, 'comment', comment.user_id);
     };
-    
+
     return (
         <div className="flex gap-4">
             <div className="w-8 h-8 bg-surface-light rounded-full flex items-center justify-center text-text-primary border border-border flex-shrink-0 mt-1">
@@ -63,7 +64,7 @@ export default function CommentSection({ logId, initialComments, currentUser, on
             .insert({ log_id: logId, user_id: currentUser.id, content: newComment })
             .select('*, profiles(id, full_name, avatar_url, reputation)')
             .single();
-        
+
         if (error) {
             console.error("Error posting comment:", error);
         } else if (data) {
@@ -82,7 +83,7 @@ export default function CommentSection({ logId, initialComments, currentUser, on
 
             <form onSubmit={handleSubmit} className="mt-8 flex gap-4 items-start">
                 <div className="w-10 h-10 bg-surface-light rounded-full flex items-center justify-center text-text-primary border border-border flex-shrink-0">
-                    <UserIcon />
+                    <UserIcon className="w-6 h-6" />
                 </div>
                 <div className="flex-1">
                     <textarea

@@ -1,16 +1,19 @@
 
 import React from 'react';
 import { LogEntry } from '../types';
-import { UserIcon, CommentIcon, UpvoteIcon, StarIcon, GitHubIcon, ExternalLinkIcon } from './icons';
+import { User } from '@supabase/supabase-js';
+import { UserIcon, CommentIcon, UpvoteIcon, StarIcon, GitHubIcon, ExternalLinkIcon, CloseIcon } from './icons';
 import TagLink from './TagLink';
 
 interface LogCardProps {
   log: LogEntry;
+  currentUser: User;
   upvotedItems: Set<string>;
   onUpvote: (id: string, type: 'log' | 'comment', authorId: string) => void;
+  onDelete?: (logId: string) => void;
 }
 
-export default function LogCard({ log, upvotedItems, onUpvote }: LogCardProps) {
+export default function LogCard({ log, currentUser, upvotedItems, onUpvote, onDelete }: LogCardProps) {
   const formattedDate = new Date(log.created_at).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -24,6 +27,16 @@ export default function LogCard({ log, upvotedItems, onUpvote }: LogCardProps) {
     e.stopPropagation();
     onUpvote(log.id, 'log', log.user_id);
   };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (confirm('Are you sure you want to delete this log entry?')) {
+      onDelete?.(log.id);
+    }
+  };
+
+  const isOwnLog = log.user_id === currentUser.id;
 
   return (
     <div className="bg-surface p-5 rounded-xl border border-border hover:border-accent-primary/50 transition-colors duration-300 animate-fade-in">
@@ -77,6 +90,12 @@ export default function LogCard({ log, upvotedItems, onUpvote }: LogCardProps) {
             <CommentIcon />
             <span className="text-sm font-medium">{log.comment_count || 0}</span>
         </a>
+        {isOwnLog && onDelete && (
+          <button onClick={handleDeleteClick} className="flex items-center gap-2 hover:text-red-500 transition-colors text-red-400">
+            <CloseIcon />
+            <span className="text-sm font-medium">Delete</span>
+          </button>
+        )}
       </div>
     </div>
   );

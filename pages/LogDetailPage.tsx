@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { LogEntry, Comment, User } from '../types';
+import { LogEntry, Comment } from '../types';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 import CommentSection from '../components/CommentSection';
 import { UserIcon, StarIcon } from '../components/icons';
@@ -95,10 +96,10 @@ export default function LogDetailPage({ logId, currentUser, upvotedItems, onUpvo
     return (
         <div className="animate-fade-in space-y-8">
             <LogDetailCard log={log} />
-            <CommentSection 
-                logId={logId} 
-                initialComments={comments} 
-                currentUser={currentUser} 
+            <CommentSection
+                logId={logId}
+                initialComments={comments}
+                currentUser={currentUser}
                 onCommentAdded={handleAddComment}
                 upvotedItems={upvotedItems}
                 onUpvote={onUpvote}

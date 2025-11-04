@@ -127,9 +127,9 @@ export default function App() {
 
   const handleAddLog = useCallback(async (newLog: Omit<LogEntry, 'id' | 'user_id' | 'created_at' | 'upvotes'>) => {
     if (!user || !profile) return;
-    
+
     const { error } = await supabase.from('learning_logs').insert([{ ...newLog, user_id: user.id }]).select().single();
-    
+
     if (error) {
         console.error('Error adding log:', error);
         alert('Error: Could not post your log.');
@@ -137,6 +137,25 @@ export default function App() {
         await fetchInitialData(user);
     }
   }, [user, profile, fetchInitialData]);
+
+  const handleDeleteLog = useCallback(async (logId: string) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('learning_logs')
+      .delete()
+      .eq('id', logId)
+      .eq('user_id', user.id); // Ensure user can only delete their own logs
+
+    if (error) {
+      console.error('Error deleting log:', error);
+      alert('Error: Could not delete the log.');
+    } else {
+      // Remove the deleted log from state
+      setLogs(prev => prev.filter(log => log.id !== logId));
+      setPublicLogs(prev => prev.filter(log => log.id !== logId));
+    }
+  }, [user]);
 
   const handleUpvote = async (itemId: string, itemType: 'log' | 'comment', authorId: string) => {
       const isCurrentlyUpvoted = upvotedItems.has(itemId);
@@ -184,7 +203,7 @@ export default function App() {
         return <ProfilePage profileId={params.id || user!.id} currentUser={user!} />;
       case 'dashboard':
       default:
-        return <DashboardPage logs={logs} onAddLog={handleAddLog} />;
+        return <DashboardPage logs={logs} currentUser={user!} onAddLog={handleAddLog} onDeleteLog={handleDeleteLog} />;
     }
   };
 
