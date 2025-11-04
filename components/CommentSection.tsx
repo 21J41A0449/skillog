@@ -24,7 +24,7 @@ const CommentItem = ({ comment, onUpvote, isUpvoted }: { comment: Comment, onUpv
     return (
         <div className="flex gap-4">
             <div className="w-8 h-8 bg-surface-light rounded-full flex items-center justify-center text-text-primary border border-border flex-shrink-0 mt-1">
-                <UserIcon className="w-5 h-5" />
+                <UserIcon />
             </div>
             <div className="flex-1">
                 <div className="bg-surface-light p-3 rounded-lg border border-border">
